@@ -29,9 +29,22 @@ public class UserDAO {
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, user.getName());
             ps.setString(2, user.getEmail());
-            ps.setString(3, user.getPassword());
+            ps.setString(3, PasswordUtil.hashPassword(user.getPassword()));
             ps.setBoolean(4, user.isVerified());
             ps.setInt(5, user.getId());
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean updatePassword(int userId, String newPassword) {
+        String sql = "UPDATE users SET password = ? WHERE id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, PasswordUtil.hashPassword(newPassword));
+            ps.setInt(2, userId);
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();

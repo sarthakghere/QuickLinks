@@ -19,6 +19,7 @@
             <button type="submit">Login</button>
         </form>
         <p>Don’t have an account? <a href="register.jsp">Register</a></p>
+        <p><a href="forgot_password.jsp">Forgot Password?</a></p>
         <% if ("true".equals(request.getParameter("registered"))) { %>
             <p style="color: green;">Registration successful! Please check your email to verify your account.</p>
         <% } %>
