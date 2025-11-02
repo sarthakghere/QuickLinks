@@ -15,7 +15,23 @@ public class UserDAO {
             ps.setString(1, user.getName());
             ps.setString(2, user.getEmail());
             ps.setString(3, PasswordUtil.hashPassword(user.getPassword()));
+            ps.setBoolean(4, false);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean updateUser(User user) {
+        String sql = "UPDATE users SET name = ?, email = ?, password = ?, is_verified = ? WHERE id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, user.getName());
+            ps.setString(2, user.getEmail());
+            ps.setString(3, user.getPassword());
             ps.setBoolean(4, user.isVerified());
+            ps.setInt(5, user.getId());
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -52,7 +68,7 @@ public class UserDAO {
 }
 
 
-    public User getUserById(int id) {
+    public User findById(int id) {
         String sql = "SELECT * FROM users WHERE id = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -65,17 +81,7 @@ public class UserDAO {
         return null;
     }
 
-    public boolean verifyUser(int userId) {
-        String sql = "UPDATE users SET is_verified = 1 WHERE id = ?";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, userId);
-            return ps.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
+
 
     private User extractUser(ResultSet rs) throws SQLException {
         User u = new User();

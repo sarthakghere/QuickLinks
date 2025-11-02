@@ -27,6 +27,7 @@ public class EmailVerificationToken {
     public String getToken() { return token; }
     public void setToken(String token) { this.token = token; }
 
-    public Timestamp getExpiry() { return expiry; }
-    public void setExpiry(Timestamp expiry) { this.expiry = expiry; }
+    public boolean isExpired() {
+        return expiry.before(new java.sql.Timestamp(System.currentTimeMillis()));
+    }
 }

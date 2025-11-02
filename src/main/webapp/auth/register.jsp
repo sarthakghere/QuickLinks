@@ -7,7 +7,7 @@
         <h2>Create an Account</h2>
         <p class="subtext">Join QuickLinks and manage your resources easily.</p>
 
-        <form action="<%= request.getContextPath() %>/RegisterServlet" method="post" class="auth-form">
+        <form action="<%= request.getContextPath() %>/auth/register" method="post" class="auth-form">
             <div class="input-group">
                 <label for="name">Full Name</label>
                 <input type="text" id="name" name="name" placeholder="John Doe" required>

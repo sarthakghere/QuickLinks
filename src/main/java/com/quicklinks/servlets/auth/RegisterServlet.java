@@ -1,13 +1,17 @@
 package com.quicklinks.servlets.auth;
 
+import com.quicklinks.utils.EmailUtil;
+import com.quicklinks.dao.EmailVerificationTokenDAO;
 import com.quicklinks.dao.UserDAO;
+import com.quicklinks.model.EmailVerificationToken;
 import com.quicklinks.model.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import java.io.IOException;
+import java.util.UUID;
 
-@WebServlet("/RegisterServlet")
+@WebServlet("/auth/register")
 public class RegisterServlet extends HttpServlet {
     private UserDAO userDAO;
 
@@ -38,11 +42,23 @@ public class RegisterServlet extends HttpServlet {
         boolean inserted = userDAO.addUser(newUser);
 
         if (inserted) {
-            request.setAttribute("message", "Registration successful! Please log in.");
-            request.getRequestDispatcher("auth/login.jsp").forward(request, response);
+            User user = userDAO.getUserByEmail(email);
+            String token = UUID.randomUUID().toString();
+            EmailVerificationToken verificationToken = new EmailVerificationToken();
+            verificationToken.setUserId(user.getId());
+            verificationToken.setToken(token);
+
+            EmailVerificationTokenDAO emailVerificationTokenDAO = new EmailVerificationTokenDAO();
+            emailVerificationTokenDAO.createToken(verificationToken);
+
+            String verificationLink = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/auth/verify-email?token=" + token;
+            EmailUtil.sendEmail(email, "Email Verification", "Please click the following link to verify your email: " + verificationLink);
+
+            request.setAttribute("message", "Registration successful! Please check your email to verify your account.");
+            request.getRequestDispatcher("/auth/login.jsp").forward(request, response);
         } else {
             request.setAttribute("error", "Registration failed. Try again!");
-            request.getRequestDispatcher("auth/register.jsp").forward(request, response);
+            request.getRequestDispatcher("/auth/register.jsp").forward(request, response);
         }
     }
 }
