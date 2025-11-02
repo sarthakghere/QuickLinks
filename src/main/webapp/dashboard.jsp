@@ -123,6 +123,7 @@
                         <th>Original URL</th>
                         <th>Short URL</th>
                         <th>Visits</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -135,6 +136,12 @@
                                 </a>
                             </td>
                             <td class="text-center"><%= l.getTotalVisits() %></td>
+                            <td>
+                                <form action="removeShortLink" method="post" style="display:inline;">
+                                    <input type="hidden" name="link_id" value="<%= l.getId() %>">
+                                    <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                                </form>
+                            </td>
                         </tr>
                     <% } %>
                 </tbody>

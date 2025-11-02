@@ -61,6 +61,33 @@ public class ShortLinkDAO {
         }
     }
 
+    public boolean isOwner(int userId, int linkId) {
+        String sql = "SELECT COUNT(*) FROM short_links WHERE user_id = ? AND id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            ps.setInt(2, linkId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public void delete(int linkId) {
+        String sql = "DELETE FROM short_links WHERE id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, linkId);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     private ShortLink extractLink(ResultSet rs) throws SQLException {
         return new ShortLink(
                 rs.getInt("id"),
