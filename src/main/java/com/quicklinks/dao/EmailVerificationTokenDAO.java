@@ -47,6 +47,17 @@ public class EmailVerificationTokenDAO {
         }
     }
 
+    public void deleteTokenByUserId(int userId) {
+        String sql = "DELETE FROM email_verification_tokens WHERE user_id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     private EmailVerificationToken extractToken(ResultSet rs) {
         try {
             return new EmailVerificationToken(

@@ -27,15 +27,16 @@ public class LoginServlet extends HttpServlet {
         if (user != null) {
             if (!user.isVerified()) {
                 request.setAttribute("error", "Please verify your email before logging in.");
-                request.getRequestDispatcher("auth/login.jsp").forward(request, response);
+                request.setAttribute("email", email);
+                request.getRequestDispatcher("/auth/login.jsp").forward(request, response);
                 return;
             }
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
-            response.sendRedirect("dashboard.jsp");
+            response.sendRedirect("/dashboard.jsp");
         } else {
             request.setAttribute("error", "Invalid email or password.");
-            request.getRequestDispatcher("auth/login.jsp").forward(request, response);
+            request.getRequestDispatcher("/auth/login.jsp").forward(request, response);
         }
     }
 }
