@@ -88,6 +88,31 @@ public class ShortLinkDAO {
         }
     }
 
+    public ShortLink getById(int id) {
+        String sql = "SELECT * FROM short_links WHERE id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return extractLink(rs);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void update(ShortLink link) {
+        String sql = "UPDATE short_links SET original_url = ? WHERE id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, link.getOriginalUrl());
+            ps.setInt(2, link.getId());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     private ShortLink extractLink(ResultSet rs) throws SQLException {
         return new ShortLink(
                 rs.getInt("id"),

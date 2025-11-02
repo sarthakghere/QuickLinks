@@ -137,6 +137,7 @@
                             </td>
                             <td class="text-center"><%= l.getTotalVisits() %></td>
                             <td>
+                                <a href="edit_link.jsp?id=<%= l.getId() %>" class="btn btn-primary btn-sm">Edit</a>
                                 <form action="removeShortLink" method="post" style="display:inline;">
                                     <input type="hidden" name="link_id" value="<%= l.getId() %>">
                                     <button type="submit" class="btn btn-danger btn-sm">Remove</button>
