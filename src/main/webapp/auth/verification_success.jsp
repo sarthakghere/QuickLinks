@@ -67,7 +67,7 @@
 </style>
 
 <div class="verification-card">
-    <div class="checkmark">✅</div>
+    <div class="checkmark">&#10003;</div>
     <h3 class="card-title">Email Verified Successfully</h3>
     <p class="card-text">
         Your email has been successfully verified.<br>

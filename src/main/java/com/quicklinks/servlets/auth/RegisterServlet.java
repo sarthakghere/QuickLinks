@@ -54,8 +54,7 @@ public class RegisterServlet extends HttpServlet {
             String verificationLink = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/auth/verify-email?token=" + token;
             EmailUtil.sendEmail(email, "Email Verification", "Please click the following link to verify your email: " + verificationLink);
 
-            request.setAttribute("message", "Registration successful! Please check your email to verify your account.");
-            request.getRequestDispatcher("/auth/login.jsp").forward(request, response);
+            response.sendRedirect(request.getContextPath() + "/auth/login.jsp?registered=true");
         } else {
             request.setAttribute("error", "Registration failed. Try again!");
             request.getRequestDispatcher("/auth/register.jsp").forward(request, response);

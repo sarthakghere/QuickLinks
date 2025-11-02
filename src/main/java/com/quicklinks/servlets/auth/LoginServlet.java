@@ -7,7 +7,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import java.io.IOException;
 
-@WebServlet("/LoginServlet")
+@WebServlet("/auth/login")
 public class LoginServlet extends HttpServlet {
     private UserDAO userDAO;
 
@@ -25,6 +25,11 @@ public class LoginServlet extends HttpServlet {
         User user = userDAO.authenticateUser(email, password);
 
         if (user != null) {
+            if (!user.isVerified()) {
+                request.setAttribute("error", "Please verify your email before logging in.");
+                request.getRequestDispatcher("auth/login.jsp").forward(request, response);
+                return;
+            }
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
             response.sendRedirect("dashboard.jsp");
