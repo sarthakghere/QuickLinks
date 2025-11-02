@@ -2,3 +2,4 @@
 src/main/resources/db.properties
 src/main/resources/email.properties
 target/
+.DS_Store
