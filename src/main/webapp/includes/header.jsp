@@ -207,6 +207,15 @@
     text-decoration: underline;
 }
 
+footer {
+            text-align: center;
+            padding: 1.5rem;
+            color: #666;
+            font-size: 0.9rem;
+            background: #f8f9fa;
+            margin-top: auto;
+        }
+
 /* Subtle fade animation */
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(15px); }
