@@ -46,7 +46,7 @@ public class EmailVerificationServlet extends HttpServlet {
             User user = userDAO.findById(verificationToken.getUserId());
             if (user != null) {
                 user.setVerified(true);
-                userDAO.updateUser(user);
+                userDAO.verifyUser(user);
                 emailVerificationTokenDAO.deleteToken(verificationToken.getId());
                 response.sendRedirect(request.getContextPath() + "/auth/verification_success.jsp");
             } else {

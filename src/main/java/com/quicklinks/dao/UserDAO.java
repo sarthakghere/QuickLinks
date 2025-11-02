@@ -39,6 +39,19 @@ public class UserDAO {
         return false;
     }
 
+    public boolean verifyUser(User user) {
+        String sql = "UPDATE users SET is_verified = ? WHERE id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setBoolean(1, user.isVerified());
+            ps.setInt(2, user.getId());
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public boolean updatePassword(int userId, String newPassword) {
         String sql = "UPDATE users SET password = ? WHERE id = ?";
         try (Connection conn = DBConnection.getConnection();
